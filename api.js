@@ -2,62 +2,62 @@ const process = require('process');
 const https = require('https');
 
 class BanggoodAPI {
-	constructor() {
-		this.apiKey = process.env.BANGGOOD_API_KEY;
-		this.apiSecret = process.env.BANGGOOD_API_SECRET;
-		this.accessToken = process.env.BANGGOOD_API_TOKEN;
-		this.domain = 'https://579d00af-7b6e-492a-aed2-0586cc0d5e80.mock.pstmn.io';
-		this.task = '';
-		this.options = {
+    constructor() {
+        this.apiKey = process.env.BANGGOOD_API_KEY;
+        this.apiSecret = process.env.BANGGOOD_API_SECRET;
+        this.accessToken = process.env.BANGGOOD_API_TOKEN;
+        this.domain = 'https://579d00af-7b6e-492a-aed2-0586cc0d5e80.mock.pstmn.io';
+        this.task = '';
+        this.options = {
             headers: {
-                'access-token' : '',
-			},
+                'access-token': '',
+            },
             method: 'GET',
             params: {},
-		};
-	}
+        };
+    }
 
-	accessTokenValid() {
-		if (this.accessToken === undefined) {
+    accessTokenValid() {
+        if (this.accessToken === undefined) {
             return false;
-		} else {
+        } else {
             let now = new Date().getTime();
             let token = JSON.parse(this.accessToken);
             if (token.valid < now) {
                 return false;
             }
-		}
-		return true;
-	}
+        }
+        return true;
+    }
 
-	storeAccessToken(token) {
+    storeAccessToken(token) {
         console.log('storing access token');
         let accessToken = JSON.parse(token);
         this.options.headers['access-token'] = accessToken.value;
         process.env.BANGGOOD_API_TOKEN = token;
-	}
+    }
 
-	async getAccessToken() {
+    async getAccessToken() {
         console.log('get access token');
         this.task = 'getAccessToken';
-		let response = await this.fetch();
-		response = JSON.parse(response);
-		if (response.code == 200) {
+        let response = await this.fetch();
+        response = JSON.parse(response);
+        if (response.code == 200) {
             let token = {};
             token.value = response.result.access_token;
             token.valid = response.result.expires_in + new Date().getTime();
             return JSON.stringify(token);
-		}
-	}
+        }
+    }
 
-	async getCouponList(params) {
+    async getCouponList(params) {
         this.task = 'coupon/list';
         this.method = 'GET';
         this.options.params = params;
         this.fetch();
-	}
+    }
 
-    async fetch () {
+    async fetch() {
         let url = this.domain + '/' + this.task;
         if (this.method == 'POST') {
             this.options.headers['Content-type'] = 'application/json';
