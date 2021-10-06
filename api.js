@@ -1,5 +1,7 @@
 const process = require('process');
 const https = require('https');
+const md5 = require('nodejs-md5');
+const crypto = require('crypto');
 
 class BanggoodAPI {
     constructor() {
@@ -40,6 +42,18 @@ class BanggoodAPI {
     async getAccessToken() {
         console.log('get access token');
         this.task = 'getAccessToken';
+        let params = {};
+        params['api_key'] = this.apiKey;
+        params['noncestr'] = await this.generateRandomString();
+        params['timestamp'] = new Date().getTime();
+        params['signature'] = await this.generateMD5(
+            'api_key=' + params['api_key'] + '&' +
+            'api_secret=' + this.apiSecret + '&' +
+            'noncestr=' + params['noncestr'] + '&' +
+            'timestamp=' + params['timestamp']
+        );
+        this.options.params = params;
+
         let response = await this.fetch();
         response = JSON.parse(response);
         if (response.code == 200) {
@@ -95,6 +109,22 @@ class BanggoodAPI {
             }
             req.end();
         });
+    }
+
+    async generateRandomString() {
+        return new Promise((resolve) => {
+            crypto.generateKey('hmac', { length: 128 }, (err, key) => {
+                resolve(key.export().toString('hex'));
+            })
+        });
+    }
+
+    async generateMD5(string) {
+        return new Promise((resolve) => {
+            md5.string.quiet(string, (err, val) => {
+                resolve(val);
+            });
+        })
     }
 }
 
