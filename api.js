@@ -71,6 +71,41 @@ class BanggoodAPI {
         this.fetch();
     }
 
+    async getCouponDetails(params) {
+        this.task = 'coupon/detail';
+        this.method = 'GET';
+        this.options.params = params;
+        this.fetch();
+    }
+
+    async getProductList(params) {
+        this.task = 'product/list';
+        this.method = 'GET';
+        this.options.params = params;
+        this.fetch();
+    }
+
+    async getProductCategory(params) {
+        this.task = 'product/category';
+        this.method = 'GET';
+        this.options.params = params;
+        this.fetch();
+    }
+
+    async getProductDetail(params) {
+        this.task = 'product/detail';
+        this.method = 'GET';
+        this.options.params = params;
+        this.fetch();
+    }
+
+    async getCountriesList(params) {
+        this.task = 'countries/list';
+        this.method = 'GET';
+        this.options.params = params;
+        this.fetch();
+    }
+
     async fetch() {
         let url = this.domain + '/' + this.task;
         if (this.method == 'POST') {
