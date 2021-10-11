@@ -2,12 +2,13 @@ const process = require('process');
 const https = require('https');
 const md5 = require('nodejs-md5');
 const crypto = require('crypto');
+const fs = require('fs');
 
 class BanggoodAPI {
     constructor() {
         this.apiKey = process.env.BANGGOOD_API_KEY;
         this.apiSecret = process.env.BANGGOOD_API_SECRET;
-        this.accessToken = process.env.BANGGOOD_API_TOKEN;
+        this.accessToken = '';
         this.domain = 'https://579d00af-7b6e-492a-aed2-0586cc0d5e80.mock.pstmn.io';
         this.task = '';
         this.options = {
@@ -19,9 +20,15 @@ class BanggoodAPI {
         };
     }
 
-    accessTokenValid() {
-        if (this.accessToken === undefined) {
-            return false;
+    async accessTokenValid() {
+        if (this.accessToken === '') {
+            let token = await this.getAccessToken();
+            if (token === false) {
+                return false;
+            } else {
+                this.setAccessToken(token);
+                return true;
+            }
         } else {
             let now = new Date().getTime();
             let token = JSON.parse(this.accessToken);
@@ -32,11 +39,25 @@ class BanggoodAPI {
         return true;
     }
 
-    storeAccessToken(token) {
-        console.log('storing access token');
+    setAccessToken(token) {
         let accessToken = JSON.parse(token);
+        this.accessToken = token;
         this.options.headers['access-token'] = accessToken.value;
-        process.env.BANGGOOD_API_TOKEN = token;
+    }
+
+    storeAccessToken(token, file) {
+        fs.writeFile(file, JSON.stringify(token));
+    }
+
+    async loadAccessToken(file) {
+        return new Promise((resolve) => {
+            fs.readFile(file, (err, data) => {
+                if (!err) {
+                    this.accessToken = data;
+                }
+                resolve(this);
+            });
+        });
     }
 
     async getAccessToken() {
@@ -61,6 +82,8 @@ class BanggoodAPI {
             token.value = response.result.access_token;
             token.valid = response.result.expires_in + new Date().getTime();
             return JSON.stringify(token);
+        } else {
+            return false;
         }
     }
 
@@ -116,12 +139,6 @@ class BanggoodAPI {
                     .flatMap(e => { return e[0] + '=' + e[1]; })
                     .join('&');
             }
-        }
-
-        if (this.accessTokenValid() == false && this.task !== 'getAccessToken') {
-            console.log('get new token');
-            let token = await this.getAccessToken();
-            this.storeAccessToken(token);
         }
 
         return new Promise((resolve) => {
