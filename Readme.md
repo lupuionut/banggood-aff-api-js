@@ -9,6 +9,21 @@ This implementation follows the docs from this link: https://imgs3.banggood.com/
 const api = require('./api');
 let BanggoodAPI = new api();
 
-// get a list of coupons
-BanggoodAPI.getCouponList().then(coupons => console.log(coupons));
+// load the stored token
+BanggoodAPI.loadAccessToken().then((api) => {
+
+    // validate the token
+    api.accessTokenValid().then(async (valid) => {
+
+        // if token is invalid/is not stored, try to get a new one
+                if (valid == false) {
+                        valid = await api.getAccessToken();
+                }
+
+                // if we succeed, perform the rest operations
+                if (valid) {
+                        console.log(api);
+                }
+    });
+});
 ```
