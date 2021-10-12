@@ -16,14 +16,14 @@ BanggoodAPI.loadAccessToken().then((api) => {
     api.accessTokenValid().then(async (valid) => {
 
         // if token is invalid/is not stored, try to get a new one
-                if (valid == false) {
-                        valid = await api.getAccessToken();
-                }
+        if (valid == false) {
+            valid = await api.getAccessToken();
+        }
 
-                // if we succeed, perform the rest operations
-                if (valid) {
-                        console.log(api);
-                }
+        // if we succeed, perform the rest operations
+        if (valid) {
+            console.log(api);
+        }
     });
 });
 ```
