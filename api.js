@@ -18,6 +18,7 @@ class BanggoodAPI {
             method: 'GET',
             params: {},
         };
+        this.tokenJson = './token.json';
     }
 
     async accessTokenValid() {
@@ -43,17 +44,23 @@ class BanggoodAPI {
         let accessToken = JSON.parse(token);
         this.accessToken = token;
         this.options.headers['access-token'] = accessToken.value;
+        this.storeAccessToken(token, this.tokenJson);
     }
 
-    storeAccessToken(token, file) {
-        fs.writeFile(file, JSON.stringify(token));
+    setAccessTokenFile(file) {
+        this.tokenJson = file;
     }
 
-    async loadAccessToken(file) {
+    storeAccessToken(token, location) {
+        fs.writeFile(location, JSON.stringify(token), () => { });
+    }
+
+    async loadAccessToken() {
         return new Promise((resolve) => {
-            fs.readFile(file, (err, data) => {
+            fs.readFile(this.tokenJson, (err, data) => {
                 if (!err) {
-                    this.accessToken = data;
+                    let decoded = JSON.parse(data.toString());
+                    this.setAccessToken(decoded);
                 }
                 resolve(this);
             });
@@ -149,6 +156,7 @@ class BanggoodAPI {
                 });
 
                 res.on('end', () => {
+                    this.options.params = {};
                     resolve(data);
                 });
             });
