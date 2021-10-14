@@ -9,7 +9,8 @@ class BanggoodAPI {
         this.apiKey = process.env.BANGGOOD_API_KEY;
         this.apiSecret = process.env.BANGGOOD_API_SECRET;
         this.accessToken = '';
-        this.domain = 'https://579d00af-7b6e-492a-aed2-0586cc0d5e80.mock.pstmn.io';
+        //this.domain = 'https://c56307f0-ce99-4225-87da-f63fc19b31e9.mock.pstmn.io';
+        this.domain = 'https://affapi.banggood.com';
         this.task = '';
         this.options = {
             headers: {
@@ -59,6 +60,7 @@ class BanggoodAPI {
         return new Promise((resolve) => {
             fs.readFile(this.tokenJson, (err, data) => {
                 if (!err) {
+                    console.log('loaded access token from file');
                     let decoded = JSON.parse(data.toString());
                     this.setAccessToken(decoded);
                 }
@@ -68,7 +70,7 @@ class BanggoodAPI {
     }
 
     async getAccessToken() {
-        console.log('get access token');
+        console.log('no access token or invalid, getting new access token');
         this.task = 'getAccessToken';
         let params = {};
         params['api_key'] = this.apiKey;
