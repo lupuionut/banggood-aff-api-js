@@ -70,6 +70,10 @@ class BanggoodAPI {
     }
 
     async getAccessToken() {
+        if (!this.apiKey || !this.apiSecret) {
+            console.log('BANGGOOD_API_KEY and/or BANGGOOD_API_SECRET env variables are not set');
+            return false;
+        };
         console.log('no access token or invalid, getting new access token');
         this.task = 'getAccessToken';
         let params = {};
