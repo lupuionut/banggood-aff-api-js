@@ -93,7 +93,7 @@ class BanggoodAPI {
         if (response.code == 200) {
             let token = {};
             token.value = response.result.access_token;
-            token.valid = response.result.expires_in + new Date().getTime();
+            token.valid = (response.result.expires_in * 1000) + new Date().getTime();
             return JSON.stringify(token);
         } else {
             console.log('Error getting an access token: ', response.msg);
