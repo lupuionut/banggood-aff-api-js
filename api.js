@@ -24,6 +24,7 @@ class BanggoodAPI {
 
     async accessTokenValid() {
         if (this.accessToken === '') {
+            console.log('no access token');
             let token = await this.getAccessToken();
             if (token === false) {
                 return false;
@@ -35,6 +36,7 @@ class BanggoodAPI {
             let now = new Date().getTime();
             let token = JSON.parse(this.accessToken);
             if (token.valid < now) {
+                console.log('token expired');
                 return false;
             }
         }
@@ -74,7 +76,7 @@ class BanggoodAPI {
             console.log('BANGGOOD_API_KEY and/or BANGGOOD_API_SECRET env variables are not set');
             return false;
         };
-        console.log('no access token or invalid, getting new access token');
+        console.log('getting new access token');
         this.task = 'getAccessToken';
         let params = {};
         params['api_key'] = this.apiKey;
