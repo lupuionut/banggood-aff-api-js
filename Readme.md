@@ -6,7 +6,7 @@ This implementation follows the docs from this link: https://imgs3.banggood.com/
 
 ### Usage
 ```js
-const api = require('./api');
+import { BanggoodAPI as api } from './api.js';
 let BanggoodAPI = new api();
 
 // load the stored token
