@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/lupuionut/banggood-aff-api-js#readme",
   "dependencies": {
-    "nodejs-md5": "^1.1.0"
-  }
+    "nodejs-md5": "^1.1.0",
+    "sqlite3": "^5.0.2"
+  },
+  "type": "module"
 }

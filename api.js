@@ -1,10 +1,10 @@
-const process = require('process');
-const https = require('https');
-const md5 = require('nodejs-md5');
-const crypto = require('crypto');
-const fs = require('fs');
+import process from 'process';
+import https from 'https';
+import md5 from 'nodejs-md5';
+import crypto from 'crypto';
+import fs from 'fs';
 
-class BanggoodAPI {
+export class BanggoodAPI {
     constructor() {
         this.apiKey = process.env.BANGGOOD_API_KEY;
         this.apiSecret = process.env.BANGGOOD_API_SECRET;
@@ -196,5 +196,3 @@ class BanggoodAPI {
         })
     }
 }
-
-module.exports = BanggoodAPI;
