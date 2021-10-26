@@ -9,7 +9,7 @@ export class BanggoodAPI {
         this.apiKey = process.env.BANGGOOD_API_KEY;
         this.apiSecret = process.env.BANGGOOD_API_SECRET;
         this.accessToken = '';
-        //this.domain = 'https://c56307f0-ce99-4225-87da-f63fc19b31e9.mock.pstmn.io';
+        //this.domain = 'https://res.cloudinary.com/ionutlupu/raw/upload/api';
         this.domain = 'https://affapi.banggood.com';
         this.task = '';
         this.options = {
