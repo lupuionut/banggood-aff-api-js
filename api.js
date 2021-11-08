@@ -110,7 +110,7 @@ export class BanggoodAPI {
         return new Promise((resolve) => {
             fs.rm(this.tokenJson, (err) => {
                 if (err) {
-                    console.log(err);
+                    console.log(err.message);
                 }
                 resolve();
             });
