@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 
 export class BanggoodAPI {
-    constructor() {
+    constructor(path) {
         this.apiKey = process.env.BANGGOOD_API_KEY;
         this.apiSecret = process.env.BANGGOOD_API_SECRET;
         this.accessToken = '';
@@ -19,7 +19,7 @@ export class BanggoodAPI {
             method: 'GET',
             params: {},
         };
-        this.tokenJson = './token.json';
+        this.tokenJson = path ? path + '/token.json' : './token.json';
     }
 
     async accessTokenValid() {
