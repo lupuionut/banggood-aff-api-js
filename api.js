@@ -103,6 +103,20 @@ export class BanggoodAPI {
         }
     }
 
+    /*
+        remove the file that stores the access token
+    */
+    async removeAccessToken() {
+        return new Promise((resolve) => {
+            fs.rm(this.tokenJson, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+                resolve();
+            });
+        });
+    }
+
     async getCouponList(params) {
         this.task = 'coupon/list';
         this.method = 'GET';
